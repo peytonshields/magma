@@ -41,14 +41,14 @@ cmake -G "Ninja" \
 ninja cxx; 
 ninja install-cxx
 
-sleep 30000
 # install LLVMgold in bfd-plugins
 #rm /usr/lib/bfd-plugins/libLTO.so
 #rm /usr/lib/bfd-plugins/LLVMgold.so
-cp /usr/local/lib/libLTO.so /usr/lib/bfd-plugins/.
-cp /usr/local/lib/LLVMgold.so /usr/lib/bfd-plugins/
+cp $BUILD_FOLD/llvm_tools/build-llvm/llvm/build/lib/libLTO.so /usr/lib/bfd-plugins/.
+cp $BUILD_FOLD/llvm_tools/build-llvm/llvm/build/lib//LLVMgold.so /usr/lib/bfd-plugins/
 
 #build FUZZER
+export PATH="$BUILD_FOLD/llvm_tools/build-llvm/llvm/build/bin:$PATH"
 cd "$FUZZER/repo"
 CC=clang make -j $(nproc)
 CC=clang make -j $(nproc) -C llvm_mode

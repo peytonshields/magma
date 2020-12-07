@@ -34,7 +34,10 @@ RUN	echo "magma:amgam" | chpasswd && usermod -a -G sudo magma
 RUN mkdir -p ${SHARED} ${OUT} && \
 	chown magma:magma ${SHARED} ${OUT} && \
 	chmod 744 ${SHARED} ${OUT}
-
+RUN chown magma:magma /usr/include/
+RUN chown magma:magma /usr/local/
+RUN mkdir -p /usr/lib/bfd-plugins/ && \
+    chown magma:magma /usr/lib/bfd-plugins/
 ARG magma_path=magma
 ENV MAGMA 	${MAGMA_R}/${magma_path}
 USER root:root
