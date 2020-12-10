@@ -9,57 +9,80 @@ set -e
 # - env OUT: path to directory where artifacts are stored
 # - env CFLAGS and CXXFLAGS must be set to link against Magma instrumentation
 ##
+COPY_CFLAGS=$CFLAGS
+COPY_CXXFLAGS=$CXXFLAGS
+mkdir $TARGET/repo/temp
 BUILD_FOLD=$FUZZER/repo/llvm/build
 export PATH="$BUILD_FOLD/llvm_tools/build-llvm/llvm/build/bin:$PATH"
 export LD_LIBRARY_PATH="$BUILD_FOLD/llvm_tools/build-llvm/llvm/build/lib/:$FUZZER/repo/bin/lib:$LD_LIBRARY_PATH"
 
 export CC="$FUZZER/repo/afl-clang-fast"
 export CXX="$FUZZER/repo/afl-clang-fast++"
+export TMP_DIR=$TARGET/repo/temp
 
-# Build fast target
+# Set targets for specified bugs  #TODO: automate this step
 (
-    export OUT="$OUT/afl-fast"
-    export LDFLAGS="$LDFLAGS -L$OUT"
+     echo $'pngrutil.c:3160' > $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3161' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3162' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3163' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3164' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3165' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3166' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3167' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3168' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3169' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3170' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3171' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3172' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3173' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3174' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3175' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3176' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3177' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3178' >> $TMP_DIR/BBtargets.txt
+     echo $'pngrutil.c:3179' >> $TMP_DIR/BBtargets.txt
 
-    export USE_FAST=1
+)
+
+
+
+# Generate CG and intra-procedural CFGs from program
+(
+    source "$TARGET/configrc"
+    export LDFLAGS="$LDFLAGS -L$OUT"
     export LIBS="$LIBS -l:afl_driver.o -lstdc++"
 
     "$MAGMA/build.sh"
+    export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -Wl,-plugin-opt=save-temps"
+    export CFLAGS="$COPY_FLAGS $ADDITIONAL"
+    export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
+     cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+     cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+    P="${PROGRAMS[@]}" #TODO: Iterate over programs
+    cd "$TARGET/repo"
+    cp $OUT/libpng_read_fuzzer $TARGET/repo/.
+    cp $OUT/libpng16.a $TARGET/repo/.
+    $FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
+
 )
 
-# Create taint rule list for track target
+
+# # Instrument the program
 (
-    cd "$OUT/afl-fast"
-    source "$TARGET/configrc"
+    cd "$TARGET/repo"
 
-    # Don't create taint rule list for the following libraries
-    LIB_BLACKLIST=(linux-vdso libc++abi libgcc_s libc ld-linux-x86-64)
+    export CFLAGS="$COPY_CFLAGS -distance=$TMP_DIR/distance.cfg.txt"
+    export CXXFLAGS="$COPY_CXXFLAGS -distance=$TMP_DIR/distance.cfg.txt"
 
-    # Discard taint for all linked libraries
-    for P in "${PROGRAMS[@]}"; do
-        for L in $(ldd "./$P" | awk 'NF == 4 {print $3}; NF == 2 {print $1}'); do
-            L=$(readlink -f $L)
-            LIB_NAME=$(basename $L | sed 's/\.so[.0-9]*//')
-            if [[ ! " ${LIB_BLACKLIST[@]} " =~ " $LIB_NAME " ]]; then
-                "$FUZZER/repo/tools/gen_library_abilist.sh" $L discard >> "$TARGET/repo/abilist.txt"
-            fi
-        done
-    done
-)
-
-# Build track target
-(
-    export OUT="$OUT/afl-track"
     export LDFLAGS="$LDFLAGS -L$OUT -L$FUZZER/repo/bin/lib"
     export LIBS="$LIBS -l:afl_driver.o -lstdc++"
 
-    export USE_TRACK=1
-    export ANGORA_TAINT_RULE_LIST="$TARGET/repo/abilist.txt"
-
-    "$MAGMA/build.sh"
+#    "$MAGMA/build.sh"
     "$TARGET/build.sh"
 )
+
 
 # NOTE: We pass $OUT directly to the target build.sh script, since the artifact
 #       itself is the fuzz target. In the case of Angora, we might need to
