@@ -20,29 +20,10 @@ export CC="$FUZZER/repo/afl-clang-fast"
 export CXX="$FUZZER/repo/afl-clang-fast++"
 export TMP_DIR=$TARGET/repo/temp
 
-# Set targets for specified bugs  #TODO: automate this step
+# Set targets for specified bugs 
 (
-     echo $'pngrutil.c:3160' > $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3161' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3162' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3163' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3164' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3165' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3166' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3167' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3168' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3169' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3170' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3171' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3172' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3173' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3174' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3175' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3176' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3177' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3178' >> $TMP_DIR/BBtargets.txt
-     echo $'pngrutil.c:3179' >> $TMP_DIR/BBtargets.txt
-
+      $FUZZER/fetchtargets.sh
+      cp $OUT/BBtargets.txt $TMP_DIR/.
 )
 
 
