@@ -36,7 +36,7 @@ export TMP_DIR=$TARGET/repo/temp
 
     "$MAGMA/build.sh"
     export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -Wl,-plugin-opt=save-temps"
-    export CFLAGS="$COPY_FLAGS $ADDITIONAL"
+    export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
      cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
