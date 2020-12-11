@@ -21,8 +21,16 @@ while read patch; do
         echo "Current patch: $patch"
         patchfile="$(basename -- $patch)"
         patch_name="${patchfile%.*}"
-    if [[ $PATCHES == "all patches" || "$PATCHES" == *"$patch_name"* ]]; then
         echo "Applying $patch"
+
+    if [[ $PATCHES == "all patches" ]]; then
         patch -p1 -d "$TARGET/repo" <"$patch"
+    else
+        if [[ "$PATCHES" == *"$patch_name"* ]]; then
+          echo "Modifying $patch"
+          sed -i 's/^.*+#ifdef MAGMA_ENABLE_CANARIES.*$/+#ifndef MAGMA_ENABLE_CANARIES/' "$patch"
+          sed -i 's/^.*+#ifdef MAGMA_ENABLE_FIXES.*$/+#ifndef MAGMA_ENABLE_FIXES/' "$patch"
+        fi
+   #     patch -p1 -d "$TARGET/repo" <"$patch"
     fi
 done
