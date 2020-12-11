@@ -31,6 +31,6 @@ while read patch; do
           sed -i 's/^.*+#ifdef MAGMA_ENABLE_CANARIES.*$/+#ifndef MAGMA_ENABLE_CANARIES/' "$patch"
           sed -i 's/^.*+#ifdef MAGMA_ENABLE_FIXES.*$/+#ifndef MAGMA_ENABLE_FIXES/' "$patch"
         fi
-   #     patch -p1 -d "$TARGET/repo" <"$patch"
+        patch -p1 -d "$TARGET/repo" <"$patch"
     fi
 done
