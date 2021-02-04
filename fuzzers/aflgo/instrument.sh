@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 ##
 # Pre-requirements:
@@ -22,29 +22,44 @@ export TMP_DIR=$TARGET/repo/temp
 
 # Set targets for specified bugs 
 (
+      echo "Setting targets"
       $FUZZER/fetchtargets.sh
       cp $OUT/BBtargets.txt $TMP_DIR/.
+      cp $OUT/Ftargets.txt $TMP_DIR/.
 )
 
 
 
 # Generate CG and intra-procedural CFGs from program
 (
+    echo "Generating CG"
     source "$TARGET/configrc"
     export LDFLAGS="$LDFLAGS -L$OUT"
     export LIBS="$LIBS -l:afl_driver.o -lstdc++"
 
     "$MAGMA/build.sh"
+
     export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -Wl,-plugin-opt=save-temps"
     export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
-     cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+    
+    if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
+      echo "Second time compilation due to a potential bug in clang 4.0."
+      export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -v" 
+      export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
+      export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
+      "$TARGET/build.sh"
+    fi
+
+    echo "target build is done"   
+    cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
      cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
     P="${PROGRAMS[@]}" #TODO: Iterate over programs
     cd "$TARGET/repo"
-    cp $OUT/libpng_read_fuzzer $TARGET/repo/.
-    cp $OUT/libpng16.a $TARGET/repo/.
+   # cp $OUT/libpng_read_fuzzer $TARGET/repo/.
+   # cp $OUT/libpng16.a $TARGET/repo/.
+    echo "Generating distances"
     $FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
 
 )
@@ -52,6 +67,7 @@ export TMP_DIR=$TARGET/repo/temp
 
 # # Instrument the program
 (
+    echo "Instrumenting the program"
     cd "$TARGET/repo"
 
     export CFLAGS="$COPY_CFLAGS -distance=$TMP_DIR/distance.cfg.txt"

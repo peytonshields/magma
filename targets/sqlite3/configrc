@@ -1,1 +1,2 @@
 PROGRAMS=(sqlite3_fuzz)
+PATCHES="JCH228"

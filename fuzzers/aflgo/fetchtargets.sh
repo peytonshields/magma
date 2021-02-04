@@ -23,7 +23,8 @@ for f in $FILES
 do
   #echo "Processing $f file..."
   line=$(head -n 1 $f)
-  func_name=$(cut -d "/" -f2 <<< "$line" | awk '{ print $1}')
+#  func_name=$(cut -d "/" -f2 <<< "$line" | awk '{ print $1}')
+  func_name=$(echo $line | awk -F "/" '{print $NF}')
   awk '/^@@/' $f > hi
   awk '{ print $3}'  hi > hi2
   sed 's/^.//' hi2 > hi3
@@ -37,10 +38,16 @@ do
         do
           echo "$func_name:$c" >> BBtargets.txt
         done
+
+	func=$(cat hi  | awk '{print $NF}')
+        func=$(echo $func | cut -f1 -d"(")
+        echo $func >> Ftargets.txt
+
   done <hi3   
 done
 
 mv BBtargets.txt $OUT
+mv Ftargets.txt $OUT
 cd ../
 rm -rf temp
 
