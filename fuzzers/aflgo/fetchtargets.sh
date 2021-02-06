@@ -38,9 +38,9 @@ do
         do
           echo "$func_name:$c" >> BBtargets.txt
         done
-
-	func=$(cat hi  | awk '{print $NF}')
-        func=$(echo $func | cut -f1 -d"(")
+	func=$(cat hi | cut -f1 -d"(")
+	func=$( echo $func | awk '{print $NF}')
+	func=$( echo "${func//\*}" ) #if func name contains start i.e. pointer type; remove
         echo $func >> Ftargets.txt
 
   done <hi3   

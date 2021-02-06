@@ -29,7 +29,10 @@ while read patch; do
         if [[ "$PATCHES" == *"$patch_name"* ]]; then
           echo "Modifying $patch"
           sed -i 's/^.*+#ifdef MAGMA_ENABLE_CANARIES.*$/+#ifndef MAGMA_ENABLE_CANARIES/' "$patch"
-          sed -i 's/^.*+#ifdef MAGMA_ENABLE_FIXES.*$/+#ifndef MAGMA_ENABLE_FIXES/' "$patch"
+          sed -i 's/^.*+#ifdef MAGMA_ENABLE_FIXES.*$/+#oldifndef MAGMA_ENABLE_FIXES/' "$patch"
+          sed -i 's/^.*+#ifndef MAGMA_ENABLE_FIXES.*$/+#ifdef MAGMA_ENABLE_FIXES/' "$patch"
+          sed -i 's/^.*+#oldifndef MAGMA_ENABLE_FIXES.*$/+#ifndef MAGMA_ENABLE_FIXES/' "$patch"
+ 
         fi
         patch -p1 -d "$TARGET/repo" <"$patch"
     fi
