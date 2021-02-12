@@ -25,7 +25,7 @@ export TMP_DIR=$TARGET/repo/temp
       echo "Setting targets"
       $FUZZER/fetchtargets.sh
       cp $OUT/BBtargets.txt $TMP_DIR/.
-      cp $OUT/Ftargets.txt $TMP_DIR/.
+#      cp $OUT/Ftargets.txt $TMP_DIR/.
 )
 
 
@@ -44,13 +44,13 @@ export TMP_DIR=$TARGET/repo/temp
     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
     
-    if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
-      echo "Second time compilation due to a potential bug in clang 4.0."
-      export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -v" 
-      export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
-      export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
-      "$TARGET/build.sh"
-    fi
+ #   if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
+ #     echo "Second time compilation due to a potential bug in clang 4.0."
+ #     export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -v" 
+ #     export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
+ #     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
+ #     "$TARGET/build.sh"
+ #   fi
 
     echo "target build is done"   
     cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
