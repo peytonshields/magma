@@ -5,12 +5,12 @@ set -e
 source $TARGET/configrc
 PATCH="${PATCHES}.patch" #TODO: if PATCHES include more than one patch, it will fail. Fix later
 
-if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
+#if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
 
         echo "Fetching BB targets manually"
         cp $FUZZER/targets/${PATCHES}  $OUT/BBtargets.txt
         exit
-fi
+#fi
 
 echo "Fetching BB targets automatically"
 cd $TARGET/patches/bugs
