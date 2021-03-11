@@ -62,6 +62,11 @@ make -j$(nproc) poppler poppler-cpp pdfimages pdftoppm
 EXTRA=""
 
 cp "$WORK/poppler/utils/"{pdfimages,pdftoppm} "$OUT/"
+
+#TODO: modify next two lines (if AFLGO)
+find $WORK -type f -name "*.bc" -exec cp -n {} $TARGET/repo \;
+cp $TARGET/freetype2/builds/unix/*.bc $TARGET/repo/.
+
 $CXX $CXXFLAGS -std=c++11 -I"$TARGET/repo/cpp" \
     "$TARGET/src/pdf_fuzzer.cc" -o "$OUT/pdf_fuzzer" \
     "$WORK/poppler/cpp/libpoppler-cpp.a" "$WORK/poppler/libpoppler.a" \

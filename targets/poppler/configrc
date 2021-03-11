@@ -1,4 +1,5 @@
-PROGRAMS=(pdf_fuzzer pdfimages pdftoppm)
+PROGRAMS=(pdfimages pdf_fuzzer pdftoppm)
+PATCHES="JCH207"
 
 pdfimages_ARGS="@@ /tmp/out"
 pdftoppm_ARGS="-mono -cropbox @@"
