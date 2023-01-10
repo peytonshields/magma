@@ -60,7 +60,8 @@ export TMP_DIR=$TARGET/repo/temp
    # cp $OUT/libpng_read_fuzzer $TARGET/repo/.
    # cp $OUT/libpng16.a $TARGET/repo/.
     echo "Generating distances"
-    $FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
+    #$FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
+	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo $TMP_DIR "${P[0]}"
 
 )
 
