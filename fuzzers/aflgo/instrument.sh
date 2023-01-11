@@ -25,7 +25,6 @@ export TMP_DIR=$TARGET/repo/temp
       echo "Setting targets"
       $FUZZER/fetchtargets.sh
       cp $OUT/BBtargets.txt $TMP_DIR/.
-#      cp $OUT/Ftargets.txt $TMP_DIR/.
 )
 
 
@@ -53,16 +52,17 @@ export TMP_DIR=$TARGET/repo/temp
  #   fi
 
     echo "target build is done"   
-    cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
-     cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+	cat $TMP_DIR/BBnames.txt | grep -v "^$"| rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+	cat $TMP_DIR/BBcalls.txt | grep -Ev "^[^,]*$|^([^,]*,){2,}[^,]*$"| sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+
     P="${PROGRAMS[@]}" #TODO: Iterate over programs
     cd "$TARGET/repo"
-   # cp $OUT/libpng_read_fuzzer $TARGET/repo/.
-   # cp $OUT/libpng16.a $TARGET/repo/.
     echo "Generating distances"
+	echo "Path to temps: "
+	find $FUZZER/repo -name "*.bc" | xargs echo
     #$FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
-	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo $TMP_DIR "${P[0]}"
-
+    $FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
+	#$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo $TMP_DIR $P
 )
 
 
@@ -77,7 +77,6 @@ export TMP_DIR=$TARGET/repo/temp
     export LDFLAGS="$LDFLAGS -L$OUT -L$FUZZER/repo/bin/lib"
     export LIBS="$LIBS -l:afl_driver.o -lstdc++"
 
-#    "$MAGMA/build.sh"
     "$TARGET/build.sh"
 )
 

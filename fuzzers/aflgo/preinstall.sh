@@ -22,7 +22,7 @@ UBUNTU_YEAR=`echo $UBUNTU_VERSION | cut -d. -f 1`
 UBUNTU_MONTH=`echo $UBUNTU_VERSION | cut -d. -f 2`
 
 apt-get update
-apt install -y python3 python3-dev python3-pip autoconf automake libtool-bin python3-bs4 libboost-all-dev # libclang-11.0-dev
+apt install -y python3 python3-dev python3-pip python3-distutils autoconf automake libtool-bin python3-bs4 libboost-all-dev # libclang-11.0-dev
 
 pip3 install --upgrade pip
 pip3 install networkx
