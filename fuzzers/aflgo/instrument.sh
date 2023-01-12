@@ -25,10 +25,7 @@ export TMP_DIR=$TARGET/repo/temp
       echo "Setting targets"
       $FUZZER/fetchtargets.sh
       cp $OUT/BBtargets.txt $TMP_DIR/.
-#      cp $OUT/Ftargets.txt $TMP_DIR/.
 )
-
-
 
 # Generate CG and intra-procedural CFGs from program
 (
@@ -43,7 +40,7 @@ export TMP_DIR=$TARGET/repo/temp
     export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
-    
+
  #   if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
  #     echo "Second time compilation due to a potential bug in clang 4.0."
  #     export ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -v" 
@@ -55,18 +52,16 @@ export TMP_DIR=$TARGET/repo/temp
     echo "target build is done"   
     cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
      cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
-    P="${PROGRAMS[@]}" #TODO: Iterate over programs
+    P=${PROGRAMS[@]} #TODO: Iterate over programs
     cd "$TARGET/repo"
-   # cp $OUT/libpng_read_fuzzer $TARGET/repo/.
-   # cp $OUT/libpng16.a $TARGET/repo/.
     echo "Generating distances"
     #$FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
-	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo $TMP_DIR "${P[0]}"
-
+	find $TARGET/repo -name "tiffcp.*.bc"
+	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo/tools $TMP_DIR "tiffcp"
 )
 
 
-# # Instrument the program
+# Instrument the program
 (
     echo "Instrumenting the program"
     cd "$TARGET/repo"
@@ -77,10 +72,8 @@ export TMP_DIR=$TARGET/repo/temp
     export LDFLAGS="$LDFLAGS -L$OUT -L$FUZZER/repo/bin/lib"
     export LIBS="$LIBS -l:afl_driver.o -lstdc++"
 
-#    "$MAGMA/build.sh"
     "$TARGET/build.sh"
 )
-
 
 # NOTE: We pass $OUT directly to the target build.sh script, since the artifact
 #       itself is the fuzz target. In the case of Angora, we might need to
