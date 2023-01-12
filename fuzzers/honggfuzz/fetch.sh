@@ -24,4 +24,3 @@ patch -p1 -d "$FUZZER/repo" << EOF
  
  static struct {
 EOF
->>>>>>> upstream/v1.2
