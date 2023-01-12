@@ -7,10 +7,10 @@ set -e
 ##
 
 git clone --no-checkout https://github.com/klee/klee.git "$FUZZER/klee"
-git -C "$FUZZER/klee" checkout a4250b231c8527c669c0395db69bd83cf71e9065
+git -C "$FUZZER/klee" checkout df04aeadefb4e1c34c7ef8b9123947ff045a34d9
 
 git clone --no-checkout https://github.com/klee/klee-uclibc.git "$FUZZER/uclibc"
-git -C "$FUZZER/uclibc" checkout 2a20e06561cb7f001883d06420185de0367126dd
+git -C "$FUZZER/uclibc" checkout 9351bdc9ad61ba25b051bef36f78b709ba50ff28
 
 git clone --no-checkout https://github.com/stp/stp.git "$FUZZER/stp"
-git -C "$FUZZER/stp" checkout 65b8bd355d63b2cc75ec072e3ae737dd219d731d
+git -C "$FUZZER/stp" checkout 876589d45f656f13cefeb04a2f13005d0fa0c932

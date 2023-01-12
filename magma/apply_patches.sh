@@ -13,7 +13,9 @@ source $TARGET/configrc
 find "$TARGET/patches/setup" -name "*.patch" | \
 while read patch; do
     echo "Applying $patch"
-    patch -p1 -d "$TARGET/repo" <"$patch"
+    name=${patch##*/}
+    name=${name%.patch}
+    sed "s/%MAGMA_BUG%/$name/g" "$patch" | patch -p1 -d "$TARGET/repo"
 done
 
 find "$TARGET/patches/bugs" -name "*.patch" | \

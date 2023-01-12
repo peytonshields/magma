@@ -7,4 +7,4 @@
 
 git clone --no-checkout https://github.com/glennrp/libpng.git \
     "$TARGET/repo"
-git -C "$TARGET/repo" checkout dbe3e0c43e549a1602286144d94b0666549b18e6
+git -C "$TARGET/repo" checkout a37d4836519517bdce6cb9d956092321eca3e73b

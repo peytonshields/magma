@@ -67,7 +67,7 @@ cp "$WORK/poppler/utils/"{pdfimages,pdftoppm} "$OUT/"
 find $WORK -type f -name "*.bc" -exec cp -n {} $TARGET/repo \;
 cp $TARGET/freetype2/builds/unix/*.bc $TARGET/repo/.
 
-$CXX $CXXFLAGS -std=c++11 -I"$TARGET/repo/cpp" \
+$CXX $CXXFLAGS -std=c++11 -I"$WORK/poppler/cpp" -I"$TARGET/repo/cpp" \
     "$TARGET/src/pdf_fuzzer.cc" -o "$OUT/pdf_fuzzer" \
     "$WORK/poppler/cpp/libpoppler-cpp.a" "$WORK/poppler/libpoppler.a" \
     "$WORK/lib/libfreetype.a" $LDFLAGS $LIBS -ljpeg -lz \

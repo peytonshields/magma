@@ -7,17 +7,17 @@ set -e
 ##
 
 git clone --no-checkout https://github.com/google/AFL.git "$FUZZER/afl"
-git -C "$FUZZER/afl" checkout fab1ca5ed7e3552833a18fc2116d33a9241699bc
+git -C "$FUZZER/afl" checkout 61037103ae3722c8060ff7082994836a794f978e
 cp "$FUZZER/src/afl_driver.cpp" "$FUZZER/afl/afl_driver.cpp"
 
 git clone --no-checkout https://github.com/eurecom-s3/symcc.git "$FUZZER/symcc"
-git -C "$FUZZER/symcc" checkout f69364996259b76d486dd24c2f9de2968cea2089
+git -C "$FUZZER/symcc" checkout 82151a62e3b702a2c699ca4d8ef91d3bf9beeb2b
 
 git -C "$FUZZER/symcc" submodule init
 git -C "$FUZZER/symcc" submodule update
 
 git clone --no-checkout https://github.com/Z3Prover/z3.git "$FUZZER/z3"
-git -C "$FUZZER/z3" checkout 372bb4b25afeb3d727060a7063470e4a11b78983
+git -C "$FUZZER/z3" checkout 897cbf347bcf73ac986d50636b15f09968130880
 
-git clone --no-checkout https://github.com/llvm/llvm-project.git "$FUZZER/llvm"
-git -C "$FUZZER/llvm" checkout ef4ffcafbb2deeb30ccc30ebcdf9a5a843a27ec1
+git clone --depth 1 -b release/11.x \
+    https://github.com/llvm/llvm-project.git "$FUZZER/llvm"

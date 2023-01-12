@@ -7,8 +7,8 @@
 
 git clone --no-checkout https://gitlab.freedesktop.org/poppler/poppler.git \
     "$TARGET/repo"
-git -C "$TARGET/repo" checkout 2706eca3ad3af99fa6551b9d6fcdc69eb0a0aa4e
+git -C "$TARGET/repo" checkout 1d23101ccebe14261c6afc024ea14f29d209e760
 
-git clone --no-checkout git://git.sv.nongnu.org/freetype/freetype2.git \
-    "$TARGET/freetype2"
-git -C "$TARGET/freetype2" checkout 804e625def2cfb64ef2f4c8877cd3fa11e86e208
+git clone --no-checkout https://gitlab.freedesktop.org/freetype/freetype.git \
+	"$TARGET/freetype2"
+git -C "$TARGET/freetype2" checkout 50d0033f7ee600c5f5831b28877353769d1f7d48

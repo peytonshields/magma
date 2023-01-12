@@ -42,7 +42,7 @@ fi
 $CC $CFLAGS -I. \
     "$TARGET/repo/test/ossfuzz.c" "./sqlite3.o" \
     -o "$OUT/sqlite3_fuzz" \
-    $LDFLAGS $LIBS -pthread -ldl
+    $LDFLAGS $LIBS -pthread -ldl -lm
 
 if [[ "$FUZZER" == *"aflgo"* ]]; then
   if [[ "$CFLAGS" == *"plugin-opt"* ]]; then	

@@ -7,8 +7,8 @@
 
 git clone --no-checkout https://github.com/php/php-src.git \
     "$TARGET/repo"
-git -C "$TARGET/repo" checkout 39532f9c52ef39c629deab3a30c1e56612387396
+git -C "$TARGET/repo" checkout bc39abe8c3c492e29bc5d60ca58442040bbf063b
 
 git clone --no-checkout https://github.com/kkos/oniguruma.git \
     "$TARGET/repo/oniguruma"
-git -C "$TARGET/repo/oniguruma" checkout 7c190e81397b7c37ec0e899df10be04a8eec5d4b
+git -C "$TARGET/repo/oniguruma" checkout 227ec0bd690207812793c09ad70024707c405376

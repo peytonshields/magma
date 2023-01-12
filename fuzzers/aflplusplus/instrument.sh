@@ -14,7 +14,7 @@ export CC="$FUZZER/repo/afl-clang-fast"
 export CXX="$FUZZER/repo/afl-clang-fast++"
 export AS="llvm-as"
 
-export LIBS="$LIBS -lc++ -lc++abi $FUZZER/repo/examples/aflpp_driver/libAFLDriver.a"
+export LIBS="$LIBS -lc++ -lc++abi $FUZZER/repo/utils/aflpp_driver/libAFLDriver.a"
 
 # AFL++'s driver is compiled against libc++
 export CXXFLAGS="$CXXFLAGS -stdlib=libc++"
