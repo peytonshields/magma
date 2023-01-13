@@ -24,7 +24,13 @@ export TMP_DIR=$TARGET/repo/temp
 (
       echo "Setting targets"
       $FUZZER/fetchtargets.sh
-      cp $OUT/BBtargets.txt $TMP_DIR/.
+
+	  echo "Fetched BBtargets: "
+	  cat "$TMP_DIR/BBtargets.txt"
+
+	  #echo "Downloading original BBtargets"
+	  #wget https://raw.githubusercontent.com/scanakci/magma/aflgo/fuzzers/aflgo/targets/AAH010 -O "$TMP_DIR/BBtargets.txt"
+	  #cat "$TMP_DIR/BBtargets.txt"
 )
 
 # Generate CG and intra-procedural CFGs from program
@@ -40,6 +46,9 @@ export TMP_DIR=$TARGET/repo/temp
     export CFLAGS="$COPY_CFLAGS $ADDITIONAL"
     export CXXFLAGS="$COPY_CXXFLAGS $ADDITIONAL"
     "$TARGET/build.sh"
+
+	echo "Exported Distances: "
+	cat "$TMP_DIR/callgraph.distance.txt"
 
  #   if [[ "$TARGET" == *"sqlite3"* ]]; then #TODO: add other benchmarks that have the same issue
  #     echo "Second time compilation due to a potential bug in clang 4.0."
@@ -57,7 +66,13 @@ export TMP_DIR=$TARGET/repo/temp
     echo "Generating distances"
     #$FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
 	find $TARGET/repo -name "tiffcp.*.bc"
+	find $TARGET/repo -name "callgraph.*"
 	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo/tools $TMP_DIR "tiffcp"
+
+	for a in  $TMP_DIR/step*.log; do
+		echo "Log for $a"
+		cat "$a"
+	done
 )
 
 
