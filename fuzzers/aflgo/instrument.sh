@@ -59,20 +59,37 @@ export TMP_DIR=$TARGET/repo/temp
  #   fi
 
     echo "target build is done"   
-    cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
-     cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+    #cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+     #cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+
+
+	 cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+	  cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+
     P=${PROGRAMS[@]} #TODO: Iterate over programs
     cd "$TARGET/repo"
     echo "Generating distances"
     #$FUZZER/repo/scripts/genDistance.sh $TARGET/repo $TMP_DIR "${P[0]}"
 	find $TARGET/repo -name "tiffcp.*.bc"
 	find $TARGET/repo -name "callgraph.*"
-	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo/tools $TMP_DIR "tiffcp"
+	#$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo/tools $TMP_DIR "tiffcp"
+
+	#echo "Done with gen_distance_fast"
+
+	#for a in  $TMP_DIR/step*.log; do
+	#	echo "Log for $a"
+	#	cat "$a"
+	#done
+
+	$FUZZER/repo/scripts/genDistance.sh $TARGET/repo/tools $TMP_DIR "tiffcp"
+
+	echo "Done with genDistance"
 
 	for a in  $TMP_DIR/step*.log; do
 		echo "Log for $a"
 		cat "$a"
 	done
+
 )
 
 
