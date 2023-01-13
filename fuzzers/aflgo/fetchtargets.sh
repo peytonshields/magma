@@ -8,7 +8,6 @@ PATCH="${PATCHES}.patch" #TODO: if PATCHES include more than one patch, it will 
 # Download commit-analysis tool
 wget https://raw.githubusercontent.com/jay/showlinenum/develop/showlinenum.awk -O $TMP_DIR/showlinenum.awk
 
-echo "Making showline executable"
 chmod +x $TMP_DIR/showlinenum.awk
 
 cat $TARGET/patches/bugs/$PATCH | $TMP_DIR/showlinenum.awk show_header=0 path=1 | grep -e "\.[ch]:[0-9]*:+" -e "\.cpp:[0-9]*:+" -e "\.cc:[0-9]*:+" | cut -d+ -f1 | rev | cut -c2- | rev > $TMP_DIR/BBtargets.txt
