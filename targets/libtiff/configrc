@@ -1,4 +1,4 @@
 PROGRAMS=(tiff_read_rgba_fuzzer tiffcp)
-PATCHES="TIF001.patch"
+PATCHES="TIF002"
 
 tiffcp_ARGS="-M @@ tmp.out"

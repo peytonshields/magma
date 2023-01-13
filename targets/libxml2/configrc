@@ -1,4 +1,4 @@
 PROGRAMS=(libxml2_xml_read_memory_fuzzer xmllint)
-PATCHES="AAH024"
+PATCHES="XML001"
 
 xmllint_ARGS="--valid --oldxml10 --push --memory @@"
