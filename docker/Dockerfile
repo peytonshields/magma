@@ -69,6 +69,14 @@ USER magma:magma
 RUN ${TARGET}/fetch.sh
 RUN ${MAGMA}/apply_patches.sh
 
+# Specify a bug to be tested (AFLGo only)
+ARG bug_name
+ENV BUG ${TARGET}/patches/bugs/${bug_name}.patch
+
+# Specify name of the program to be run (AFLGo only)
+ARG aflgo_program
+ENV AFLGO_PROGRAM ${aflgo_program}
+
 ## Configuration parameters
 ARG isan
 ARG harden

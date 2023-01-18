@@ -14,7 +14,8 @@ fi
 ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 # Build LLVM
-BUILD_FOLD=$FUZZER/repo/llvm/build
+#BUILD_FOLD=$FUZZER/repo/llvm/build
+BUILD_FOLD=$FUZZER/llvm/build
 cd $BUILD_FOLD/llvm_tools/build-llvm/llvm
 
 cmake -G "Ninja" \

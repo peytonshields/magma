@@ -54,6 +54,10 @@ shopt -u nullglob
 export MUX_TAR=magma_tar
 export MUX_CID=magma_cid
 
+# AFLGo specific params. $PROGRAM will be overwritten when campaign starts
+export AFLGO_PROGRAM="$AFLGO_PROGRAM"
+export BUG="$BUG"
+
 get_next_cid()
 {
     ##

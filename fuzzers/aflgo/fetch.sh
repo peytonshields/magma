@@ -11,10 +11,14 @@ git clone https://github.com/aflgo/aflgo.git "$FUZZER/repo"
 # Patch issue in AFLGo that causes it to fail to compile .S files
 cp $FUZZER/patches/afl-clang-fast.c $FUZZER/repo/llvm_mode
 
+# Make AFLGo distance calculator use recursive glob
+cp $FUZZER/patches/gen_distance_fast.py $FUZZER/repo/scripts
+
 cp "$FUZZER/src/afl_driver.cpp" "$FUZZER/repo/afl_driver.cpp"
 
 #Install LLVM
-BUILD_FOLD=$FUZZER/repo/llvm/build
+#BUILD_FOLD=$FUZZER/repo/llvm/build
+BUILD_FOLD=$FUZZER/llvm/build
 mkdir -p $BUILD_FOLD
 cd $BUILD_FOLD
 mkdir llvm_tools; cd llvm_tools

@@ -12,7 +12,8 @@
 COPY_CFLAGS=$CFLAGS
 COPY_CXXFLAGS=$CXXFLAGS
 mkdir $TARGET/repo/temp
-BUILD_FOLD=$FUZZER/repo/llvm/build
+#BUILD_FOLD=$FUZZER/repo/llvm/build
+BUILD_FOLD=$FUZZER/llvm/build
 export PATH="$BUILD_FOLD/llvm_tools/build-llvm/llvm/build/bin:$PATH"
 export LD_LIBRARY_PATH="$BUILD_FOLD/llvm_tools/build-llvm/llvm/build/lib/:$FUZZER/repo/bin/lib:$LD_LIBRARY_PATH"
 
@@ -63,8 +64,8 @@ export TMP_DIR=$TARGET/repo/temp
 	cat $TMP_DIR/BBcalls.txt | grep -Ev "^[^,]*$|^([^,]*,){2,}[^,]*$"| sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
 
     cd "$TARGET/repo"
-    echo "Generating distances"
-	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo/tools $TMP_DIR "tiffcp"
+    echo "Generating distance for $AFLGO_PROGRAM"
+	$FUZZER/repo/scripts/gen_distance_fast.py $TARGET/repo $TMP_DIR $AFLGO_PROGRAM
 	#$FUZZER/repo/scripts/genDistance.sh $TARGET/repo/tools $TMP_DIR "tiffcp"
 )
 
